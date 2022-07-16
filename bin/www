@@ -1,0 +1,31 @@
+#! /usr/bin/env node
+const chalk = require('chalk');
+const { program } = require('commander');
+
+program.version(`my-cli@${require('../package.json').version}`, '-v, --version', 'output current version');
+
+program
+    .command('create <app-name>')
+    .description('create a new project')
+    .option('-f, --force', 'overwrite target direction when it exists')
+    .action(function (appName, args) {
+        require('../lib/create.js')(appName, args)
+    });
+
+// v1.0.0 无用的命令
+program
+    .command('config [value]')
+    .description('inspect and modify the config')
+    .option('-g, --get <path>', 'get value from option')
+    .option('-s, --set <path>', 'set value from option')
+    .action(function (value, args) {
+        console.log(value, args)
+    });
+
+
+program.on('--help', function() {
+    console.log(`Run ${chalk.green('my-cli [command] --help')} show detail`)
+});
+
+program.parse(process.argv);
+
